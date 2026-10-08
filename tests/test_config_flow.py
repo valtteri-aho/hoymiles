@@ -89,3 +89,4 @@ async def test_flow_user_connection_error():
 
     assert result["type"] == "form"
     assert result["errors"] == {"base": "cannot_connect"}
+

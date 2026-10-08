@@ -54,7 +54,7 @@ async def test_argon_login_success(client):
     with patch(
         "custom_components.hoymiles_cloud.client.ARGON2_AVAILABLE", True
     ), patch.object(
-        client, "_argon_compute_challenge", return_value="computed_challenge_hash"
+        client, "_async_argon_compute_challenge", AsyncMock(return_value="computed_challenge_hash")
     ):
         mock_pre_insp = AsyncMock()
         mock_pre_insp.status = 200

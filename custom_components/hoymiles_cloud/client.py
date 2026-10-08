@@ -158,22 +158,26 @@ class HoymilesCloudClient:
         if self._custom_session is None and self._session and not self._session.closed:
             await self._session.close()
 
-    def _argon_compute_challenge(self, salt_hex: str) -> str:
-        """Compute the Argon2 ID challenge hash for modern Hoymiles auth."""
+    async def _async_argon_compute_challenge(self, salt_hex: str) -> str:
+        """Compute the Argon2 ID challenge hash offloaded from event loop."""
         if not ARGON2_AVAILABLE or hash_secret_raw is None or Type is None:
             raise RuntimeError("argon2-cffi is required for modern Hoymiles authentication")
 
-        salt = bytes.fromhex(salt_hex)
-        raw = hash_secret_raw(
-            secret=self.password.encode("utf-8"),
-            salt=salt,
-            time_cost=3,
-            memory_cost=32768,
-            parallelism=1,
-            hash_len=32,
-            type=Type.ID,
-        )
-        return raw.hex()
+        def _compute() -> str:
+            salt = bytes.fromhex(salt_hex)
+            raw = hash_secret_raw(
+                secret=self.password.encode("utf-8"),
+                salt=salt,
+                time_cost=3,
+                memory_cost=32768,
+                parallelism=1,
+                hash_len=32,
+                type=Type.ID,
+            )
+            return raw.hex()
+
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(None, _compute)
 
     async def _request(
         self,
@@ -281,7 +285,7 @@ class HoymilesCloudClient:
         if not nonce or not salt:
             return None
 
-        challenge = self._argon_compute_challenge(salt)
+        challenge = await self._async_argon_compute_challenge(salt)
 
         login_url = self.base_url.rstrip("/") + "/" + ARGON_LOGIN_API
         login_payload = {"u": self.username, "ch": challenge, "n": nonce}
@@ -376,7 +380,7 @@ class HoymilesCloudClient:
             real_power_w=real_power,
             today_energy_kwh=today_eq,
             month_energy_kwh=month_eq,
-            total_energy_kwh=total_energy_kwh if (total_energy_kwh := total_eq) else total_eq,
+            total_energy_kwh=total_eq,
             co2_reduction_kg=co2,
             tree_planted=tree,
             data_time=data_time,
@@ -412,9 +416,10 @@ class HoymilesCloudClient:
             if not isinstance(item, dict):
                 continue
 
-            # type 3 = micro-inverter
+            # dev_type: 3 = micro-inverter, 6 = hybrid inverter
             dev_type = item.get("type")
-            if dev_type == 3 or "micro" in str(item.get("text", "")).lower():
+            item_text = str(item.get("text", "")).lower()
+            if dev_type in (3, 6) or any(k in item_text for k in ("micro", "inverter")):
                 micro_id = item.get("id")
                 sn = str(item.get("sn") or micro_id)
                 model = str(item.get("model_no") or "")

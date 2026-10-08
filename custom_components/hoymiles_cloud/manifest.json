@@ -10,3 +10,4 @@
   "requirements": ["argon2-cffi>=23.1.0"],
   "version": "1.0.0"
 }
+

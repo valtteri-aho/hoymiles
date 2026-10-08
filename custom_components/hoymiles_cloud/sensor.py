@@ -251,3 +251,4 @@ class HoymilesMicroAlarmMsgSensor(CoordinatorEntity[HoymilesDataUpdateCoordinato
             sw_version=sw,
             via_device=(DOMAIN, f"plant_{self.coordinator.plant_id}"),
         )
+

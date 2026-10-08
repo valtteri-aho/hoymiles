@@ -121,3 +121,4 @@ class HoymilesDataUpdateCoordinator(DataUpdateCoordinator[HoymilesCoordinatorDat
         except Exception as err:
             _LOGGER.exception("Unexpected error fetching Hoymiles data")
             raise UpdateFailed(f"Unexpected error: {err}") from err
+

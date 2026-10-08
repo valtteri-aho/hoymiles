@@ -173,3 +173,4 @@ class HoymilesMicroProblemBinarySensor(
             sw_version=sw,
             via_device=(DOMAIN, f"plant_{self.coordinator.plant_id}"),
         )
+

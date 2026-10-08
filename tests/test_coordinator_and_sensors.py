@@ -150,3 +150,4 @@ def test_micro_sensors_and_binary_sensors():
 
     problem_sensor = HoymilesMicroProblemBinarySensor(coordinator, 2002)
     assert problem_sensor.is_on is True
+

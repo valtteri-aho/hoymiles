@@ -22,3 +22,4 @@ DEFAULT_SCAN_INTERVAL: Final = 480  # 8 minutes (safe for Hoymiles cloud rate li
 MIN_SCAN_INTERVAL: Final = 180     # 3 minutes
 DEFAULT_BASE_URL: Final = "https://neapi.hoymiles.com/"
 ESTAR_BASE_URL: Final = "https://monitor.estarpower.com/platform/api/gateway/"
+
