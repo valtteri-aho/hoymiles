@@ -480,3 +480,4 @@ class HoymilesCloudClient:
                 alarm_message = " ".join([p for p in parts if p and p != "-"])
 
         return connected, alarm_code, alarm_message
+

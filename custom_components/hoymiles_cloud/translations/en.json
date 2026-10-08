@@ -1,0 +1,42 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Hoymiles S-Miles Cloud",
+        "description": "Enter your Hoymiles S-Miles Cloud login credentials.",
+        "data": {
+          "username": "Username / Email",
+          "password": "Password",
+          "plant_id": "Plant / Station ID (optional, auto-detected if empty)",
+          "use_estar": "Use Estar Power cloud servers (rare)"
+        }
+      },
+      "select_station": {
+        "title": "Select Solar Plant",
+        "description": "Choose which solar plant to monitor.",
+        "data": {
+          "plant_id": "Solar Plant"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to Hoymiles Cloud API.",
+      "invalid_auth": "Invalid username or password.",
+      "no_stations_found": "No solar plants found associated with this account.",
+      "unknown": "Unexpected error occurred."
+    },
+    "abort": {
+      "already_configured": "This plant is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Hoymiles Cloud Options",
+        "data": {
+          "scan_interval": "Update interval (seconds, default: 480)"
+        }
+      }
+    }
+  }
+}

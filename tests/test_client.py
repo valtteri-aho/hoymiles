@@ -219,3 +219,4 @@ async def test_token_expiration_retry(client):
 
     assert res.get("status") == "0"
     assert res.get("data", {}).get("real_power") == 500
+

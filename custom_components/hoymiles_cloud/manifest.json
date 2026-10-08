@@ -1,0 +1,12 @@
+{
+  "domain": "hoymiles_cloud",
+  "name": "Hoymiles Solar Cloud",
+  "codeowners": ["@valtteri-aho"],
+  "config_flow": true,
+  "documentation": "https://github.com/valtteri-aho/hoymiles",
+  "issue_tracker": "https://github.com/valtteri-aho/hoymiles/issues",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "requirements": ["argon2-cffi>=23.1.0"],
+  "version": "1.0.0"
+}
