@@ -1,5 +1,5 @@
 {
-  "name": "DmsLabs Hoymiles Home Assistant Add-ons",
-  "url": "https://github.com/dmslabsbr/hoymiles",
-  "maintainer": "Daniel <suport@neoage.com.br>"
+  "name": "Hoymiles Home Assistant Add-ons (Valtteri Fork)",
+  "url": "https://github.com/valtteri-aho/hoymiles",
+  "maintainer": "Valtteri Aho <valtteri.aho@gmail.com>"
 }
