@@ -1,108 +1,66 @@
-<img src="https://github.com/dmslabsbr/hoymiles/raw/master/img/logo.png" alt="" width="200" />
+# Hoymiles Solar Cloud Integration for Home Assistant
 
-# Important Info
+A modern, native Home Assistant custom integration (HACS) to monitor your **Hoymiles Solar System** using your existing Hoymiles hardware and DTU (DTU-W100, DTU-Pro, DTU-WLite, etc.) via the S-Miles Cloud API.
 
-## EDGE is again alive
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/default)
+[![GitHub release](https://img.shields.io/github/v/release/valtteri-aho/hoymiles?include_prereleases)](https://github.com/valtteri-aho/hoymiles/releases)
+[![License](https://img.shields.io/github/license/valtteri-aho/hoymiles)](LICENSE)
 
-Developement in edge is done and could be now used to introduce new features.
+---
 
-Br,
-Cosik.
+## ✨ Features
 
-# HoyMiles Solar Data Gateway Add-on
+- **No Extra Hardware Needed**: Works directly with your existing Hoymiles inverter and DTU.
+- **Zero MQTT Overhead**: Native Home Assistant integration. No Mosquitto broker or Docker add-on needed.
+- **Energy Dashboard Ready**: Sensors come pre-configured with `device_class: energy` and `state_class: total_increasing` for instant use in Home Assistant's Energy panel.
+- **Easy UI Setup**: Add and authenticate directly through the Home Assistant UI (*Settings > Devices & Services*).
+- **Auto-Discovery**: Automatically discovers your solar plant(s), capacity, and micro-inverters.
+- **Modern Authentication**: Supports the latest Hoymiles Argon2 authentication challenge flow and V3 cloud API endpoints with automatic session renewal.
 
-Application to read Hoymiles Gateway Solar Data using unofficial API
+---
 
-I developed this program to integrate my solar system data to [Home Assistant](https://www.home-assistant.io/) Application through an add-on.
+## 📊 Entities Provided
 
-Now, [Cosik](https://github.com/Cosik)  is helping too.
+### Solar Plant
+- **Current Power** (`W`)
+- **Today's Energy** (`kWh`) — *Energy Dashboard compatible*
+- **Month's Energy** (`kWh`)
+- **Lifetime Energy** (`kWh`) — *Energy Dashboard compatible*
+- **CO₂ Saved** (`kg`)
+- **Trees Saved** (`trees`)
+- **Generating Status** (`binary_sensor`)
 
-[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fvaltteri-aho%2Fhoymiles)
+### Micro-Inverters
+- **Cloud Connectivity** (`binary_sensor`)
+- **Problem / Alarm Status** (`binary_sensor`)
+- **Alarm Code** (`diagnostic sensor`)
+- **Alarm Message** (`diagnostic sensor`)
 
-Donate Cosik ->
-[![Donate Cosik](https://img.shields.io/badge/Donate-PayPal-green.svg)](paypal.me/cosik3d)
+---
 
-<img alt="Lines of code" src="https://img.shields.io/tokei/lines/github/dmslabsbr/hoymiles">
-<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/dmslabsbr/hoymiles">
+## 🚀 Installation via HACS (Recommended)
 
-# Instructions
+1. Open **HACS** in your Home Assistant sidebar.
+2. Go to **Integrations**, click the three dots (**⋮**) in the top right corner, and select **Custom repositories**.
+3. Add:
+   - **Repository:** `https://github.com/valtteri-aho/hoymiles`
+   - **Category:** `Integration`
+4. Click **Add**, find **Hoymiles Solar Cloud**, and click **Download**.
+5. Restart Home Assistant.
+6. In Home Assistant, go to **Settings** > **Devices & Services** > **Add Integration**, search for **Hoymiles Solar Cloud**, and follow the on-screen instructions.
 
-<img align="center" src="https://github.com/dmslabsbr/hoymiles/raw/master/img/hass.io.png" alt="" width="30" /> [Home Assistant add-on instructions](stable/DOCS.md)
+---
 
-There are three app versions that you can choose from:
+## ⚙️ Configuration Options
 
-1 - The Old Stable Version
-[<img align="center" src="https://github.com/dmslabsbr/hoymiles/raw/master/img/add1.png" alt="Old Stable figure" width="300" />](https://github.com/dmslabsbr/hoymiles/tree/master/oldStable)
+Once installed, you can click **Configure** on the integration card to adjust the **Update Interval** (default: `480` seconds / 8 minutes to respect Hoymiles cloud rate limits).
 
-2 - The Edge Version
-[<img align="center" src="https://github.com/dmslabsbr/hoymiles/raw/master/img/add2.png" alt="Edge figure" width="300" />](https://github.com/dmslabsbr/hoymiles/tree/master/edge)
+---
 
-👉 **[Edge Setup Guide](edge/README.md)** - detailed installation, configuration options, and troubleshooting for Home Assistant users
+## 📦 Legacy Add-on (Archived)
 
-3 - The Stable Version
-[<img align="center" src="https://github.com/dmslabsbr/hoymiles/raw/master/img/add3.png" alt="New Stable figure" width="300" />](https://github.com/dmslabsbr/hoymiles/tree/master/stable)
+The previous Home Assistant Add-on implementations (Edge, Stable, and OldStable) that bridged Hoymiles cloud data via MQTT have been archived in the [`legacy/`](legacy/) folder for backward compatibility:
 
-My solar panels communicate with the internet using a DTU-W100 gateway.
-
-<img src="https://github.com/dmslabsbr/hoymiles/raw/master/img/icon.png" alt="" width="300" />
-
-But it will probably work with any device that uses the [global.hoymiles.com](https://global.hoymiles.com/) Website. It was tested with DTU-PRO also.
-
-## Standalone running - short info
-
-You could also use the application without using Home Assistant. You just need a machine that runs Python3. It's based on mqtt messages, so could be send from any device to MQTT Broker.
-
-Before run, you need to install:
-   [https://github.com/eclipse/paho.mqtt.python]  ***and***
-   [https://github.com/psf/requests]
-
-```bash
-git clone https://github.com/dmslabsbr/hoymiles.git
-cd hoymiles
-python3 -m venv ./hoymiles/
-source ./hoymiles/bin/activate
-pip3 install paho-mqtt==1.6.1
-pip3 install requests
-pip3 install python-dateutil
-```
-
-## Configuration
-
-> UI is not working and could show "Bad Gateway" which is normal and expected.
-
-Add-on is designed to use MQTT messages to send data to the Home Assistant instance.
-By default credentials and server name are taken from Home Assistant. If
-you use another broker or use your own one it is required to make `external` and fill server and credentials for connection.
-
-To get it properly working you also have to pass credentials for the Hoymiles Cloud access and your plant ID.
-
-If everything is set up correctly new MQTT entities will be visible on HA.
-
-# Supported devies
-
-So far it is confirmed that the addon supports these Hoymiles devices:
-
-- micro inverters
-- standard inverters
-- energy meters
-- bms (with some restrictions) - edge version with details
-- batteries (with some restrictions) - edge version with details
-- multiple instalattions - edge version
-
-## PS
-
-I invite everyone to help in the development of this tool.
-
-## Screenshots
-
-<img src="https://github.com/dmslabsbr/hoymiles/blob/master/img/Hass1.png?raw=true" alt="" width="400" />
-
-<img src="https://github.com/dmslabsbr/hoymiles/blob/master/img/Hass2.png?raw=true" alt="" width="400" />
-
-<img src="https://github.com/dmslabsbr/hoymiles/blob/master/img/Hass3.png?raw=true" alt="" width="400" />
-
-
-
-#### Licence
-
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+- [`legacy/edge/`](legacy/edge/) — Refactored Python add-on with MQTT publisher.
+- [`legacy/stable/`](legacy/stable/) — Stable version 1.4.x add-on.
+- [`legacy/oldStable/`](legacy/oldStable/) — Original add-on version.
